@@ -20,19 +20,31 @@ function renderWaitingForPlayers({ id, name, isMaster }) {
  *  name: string,
  *  isMaster: boolean,
  *  hand: Array<Token>,
- *  timeRemaining: int
+ *  timeRemaining: int,
+ *  canTakeFromPile: boolean
  * }
  */
 function renderGameView({ gameState, boardState, playerState }) {
 
 }
 
+function addTileToHand(tile) {
+
+}
+
 
 /*
- * updateBoard: ({ token, fromGroupId, toGroupId }) => void
+ * moveTokenOnBoard: ({ token, fromGroupId, toGroupId }) => void
+ * moveTokenFromHand: ({ token, fromGroupId, toGroupId }) => void
+ * takeTokenFromPile: () => void
  * endTurn: () => void
  */
-function registerUpdateHooks({ updateBoard, endTurn }) {
+function registerUpdateHooks({
+  moveTokenOnBoard,
+  moveTokenFromHand,
+  takeTokenFromPile,
+  endTurn
+}) {
 
 }
 
