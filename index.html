@@ -4,15 +4,21 @@
     <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link href="style.css" rel="stylesheet">
 
   </head>
   <body>
     <div id="app">
       <initial-screen v-if="status === 'initial'"></initial-screen>
+      <waiting-screen v-if="status === 'waiting-players'"></waiting-screen>
+      <board v-if="status === 'playing'"></board>
     </div>
   </body>
+  <script src="node_modules/sortablejs/Sortable.min.js"></script>
   <script src="node_modules/vue/dist/vue.js"></script>
   <script src="initial-screen.js"></script>
+  <script src="waiting-screen.js"></script>
+  <script src="board.js"></script>
   <script src="index.js"></script>
 </html>
