@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "sortablejs": "^1.7.0",
+    "deepstream.io-client-js": "git+https://github.com/deepstreamIO/deepstream.io-client-js.git",
     "vue": "^2.5.10"
   }
 }
