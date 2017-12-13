@@ -36,7 +36,7 @@ function addTokenToHand(token) {
 
 /*
  * moveTokenOnBoard: ({ token, fromGroupId, toGroupId }) => void
- * moveTokenFromHand: ({ token, fromGroupId, toGroupId }) => void
+ * moveTokenFromHand: ({ token, toGroupId }) => void
  * takeTokenFromPile: () => void
  * endTurn: () => void
  */

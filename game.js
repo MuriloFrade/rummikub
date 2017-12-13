@@ -182,7 +182,23 @@ function dealBoard ({ gameStateRecord, boardStateRecord }) {
 }
 
 function moveTokenOnBoard ({ boardStateRecord }, { token, fromGroupId, toGroupId }) {
-  const groupState = boardStateRecord.get('groups')
+  const fromGroup = boardStateRecord.get(`groups[${fromGroupId}]`) || []
+  const toGroup = boardStateRecord.get(`groups[${toGroupId}]`) || []
+
+  const fromGroupIndex = fromGroup
+    .findIndex(tok => tok.color === token.color && tok.num === token.num)
+
+  if (fromGroupIndex < 0) {
+    console.log('warning: tried to move token from group where it was not found',
+      token, fromGroupId, toGroupId)
+    return
+  }
+
+  fromGroup.slice(fromGroupIndex, fromGroupIndex + 1)
+  sortedInsert(groups[toGroupId], token)
+
+  boardStateRecord.set(`groups[${fromGroupId}]`, fromGroup)
+  boardStateRecord.set(`groups[${toGroupId}]`, toGroup)
   if (groupState.every(groupIsValid)) {
     // enable DONE button
   } else {
@@ -190,10 +206,26 @@ function moveTokenOnBoard ({ boardStateRecord }, { token, fromGroupId, toGroupId
   }
 }
 
-function moveTokenFromHand ({ boardStateRecord, playerStateRecord }, { token, fromGroupId, toGroupId }) {
+function sortedInsert (group, token) {
+  const idx = group.findIndex(
+    tok => tok.color === token.color && tok.num > token.num || tok.color > token.color
+  )
+  if (idx < 0) {
+    group.push(token)
+  } else {
+    group.splice(idx, 0, token)
+  }
+  return group
 }
 
-function takeTokenFromPile ({ boardStateRecord, playerStateRecord }) {
+function moveTokenFromHand (records, { token, toGroupId }) {
+  const { boardStateRecord, playerStateRecord } = records
+
+  onStateChanged(records)
+}
+
+function takeTokenFromPile (records) {
+  const { boardStateRecord, playerStateRecord } = records
   const pile = boardStateRecord.get('pile')
   const token = pile.pop()
   boardStateRecord.set('pile', pile)
@@ -201,6 +233,7 @@ function takeTokenFromPile ({ boardStateRecord, playerStateRecord }) {
   hand.push(token)
   playerStateRecord.set('hand', hand)
   view.addTokenToHand(token)
+  onStateChanged(records)
 }
 
 function groupIsValid (group) {
@@ -240,5 +273,5 @@ function update (boardStateRecord) {
 }
 
 module.exports = {
-  isSet, isRun
+  isSet, isRun, sortedInsert
 }
