@@ -37,13 +37,10 @@ async function start (client, name) {
   playerStateRecord.set(getInitialPlayerState(id, name, true))
 
   const records = { gameStateRecord, boardStateRecord, playerStateRecord }
-  Object.values(records).forEach(record => {
-    record.subscribe(onStateChanged.bind(null, records))
-  })
 
   client.rpc.provide('add-player', addPlayerRPC.bind(null, client, records))
 
-  onStateChanged(records)
+  genericGameInit(records)
 }
 
 /*
@@ -57,17 +54,26 @@ async function join (client, name) {
   const gameStateRecord = client.record.getRecord('gameState')
   const boardStateRecord = client.record.getRecord('boardState')
   const playerStateRecord = client.record.getRecord(`playerState/${id}`)
-  const records = { gameStateRecord, boardStateRecord, playerStateRecord }
-  await Promise.all(
-    Object.values(records).map(record => {
-      record.subscribe(onStateChanged.bind(null, records))
-      return record.whenReady()
-    })
-  )
+  await gameStateRecord.whenReady()
+  await boardStateRecord.whenReady()
+  await playerStateRecord.whenReady()
+  genericGameInit({ gameStateRecord, boardStateRecord, playerStateRecord })
+}
+
+function genericGameInit (records) {
+  Object.values(records).forEach(record => {
+    record.subscribe(onStateChanged.bind(null, records))
+  })
+  view.registerUpdateHooks({
+    moveTokenOnBoard.bind(null, records),
+    moveTokenFromHand.bind(null, records),
+    takeTokenFromPile.bind(null, records),
+    endTurn.bind(null, records)
+  })
   onStateChanged(records)
 }
 
-function onStateChanged(records) {
+function onStateChanged (records) {
   const state = records.gameStateRecord.get('state')
   switch (state) {
     case STATE.WAITING_FOR_PLAYERS:
@@ -81,11 +87,11 @@ function onStateChanged(records) {
   }
 }
 
-function waitingForPlayers({ playerStateRecord }) {
+function waitingForPlayers ({ playerStateRecord }) {
   view.renderWaitingForPlayers(playerStateRecord.get())
 }
 
-function showBoard({ gameStateRecord, boardStateRecord, playerStateRecord }) {
+function showBoard ({ gameStateRecord, boardStateRecord, playerStateRecord }) {
   const changingPlayer = records.gameStateRecord.get('changingPlayer')
   if (changingPlayer) {
     const currentPlayer = records.gameStateRecord.get('currentPlayer')
@@ -103,7 +109,7 @@ function showBoard({ gameStateRecord, boardStateRecord, playerStateRecord }) {
   })
 }
 
-function play({ gameStateRecord, boardStateRecord, playerStateRecord }) {
+function play ({ gameStateRecord, boardStateRecord, playerStateRecord }) {
   view.renderGameView({
     playing: true,
     gameState: gameStateRecord.get(),
@@ -164,14 +170,6 @@ function getInitialBoardState () {
     groups: [],
     pile: [],
     isValid: true
-  }
-}
-
-async function initialiseGameState ({ gameStateRecord, boardStateRecord }, masterId, masterName) {
-
-  return {
-    gameStateRecord,
-    boardStateRecord,
   }
 }
 
