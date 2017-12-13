@@ -7,7 +7,8 @@ function renderWaitingForPlayers({ id, name, isMaster }) {
 /*
  * gameState: {
  *  master: id
- *  players: { [id]: { name } }
+ *  players: Array<id>
+ *  playerInfo: { [id]: { name } }
  *  currentPlayer: id
  *  state: STATE
  * }
