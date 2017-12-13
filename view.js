@@ -46,6 +46,7 @@ function registerUpdateHooks({
   moveTokenFromHand,
   takeTokenFromPile,
   endTurn
+  startGame
 }) {
 
 }

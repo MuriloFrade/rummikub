@@ -110,15 +110,6 @@ function showBoard ({ gameStateRecord, boardStateRecord, playerStateRecord }) {
   })
 }
 
-function play ({ gameStateRecord, boardStateRecord, playerStateRecord }) {
-  view.renderGameView({
-    playing: true,
-    gameState: gameStateRecord.get(),
-    boardState: boardStateRecord.get(),
-    playerState: playerStateRecord.get()
-  })
-}
-
 function addPlayerRPC (client, { gameStateRecord }, { name }, response) {
   const id = addPlayer(gameStateRecord, name, false)
   client.record.setData(`playerState/${id}`, getInitialPlayerState(id, name, false))
