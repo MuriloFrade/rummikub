@@ -65,10 +65,11 @@ function genericGameInit (records) {
     record.subscribe(onStateChanged.bind(null, records))
   })
   view.registerUpdateHooks({
-    moveTokenOnBoard.bind(null, records),
-    moveTokenFromHand.bind(null, records),
-    takeTokenFromPile.bind(null, records),
-    endTurn.bind(null, records)
+    moveTokenOnBoard: moveTokenOnBoard.bind(null, records),
+    moveTokenFromHand: moveTokenFromHand.bind(null, records),
+    takeTokenFromPile: takeTokenFromPile.bind(null, records),
+    endTurn: endTurn.bind(null, records),
+    startGame: startGame.bind(null, records)
   })
   onStateChanged(records)
 }
@@ -330,8 +331,12 @@ function timerExpire (boardStateRecord) {
 
 }
 
-function update (boardStateRecord) {
-
+function startGame (records) {
+  dealBoard(records)
+  const { gameStateRecord, playerStateRecord, boardStateRecord } = records
+  const me = playerStateRecord.get('id')
+  gameStateRecord.set('currentPlayer', getNextPlayer(me))
+  gameStateRecord.set('changingPlayer', true)
 }
 
 module.exports = {
