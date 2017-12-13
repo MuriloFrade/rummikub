@@ -12,6 +12,7 @@ function renderWaitingForPlayers({ id, name, isMaster }) {
  *  state: STATE
  * }
  * boardState: {
+ *  isValid: boolean
  *  groups: Array<Array<Token>>
  *  pile: Array<Token>
  * }
@@ -28,7 +29,7 @@ function renderGameView({ gameState, boardState, playerState }) {
 
 }
 
-function addTileToHand(tile) {
+function addTokenToHand(token) {
 
 }
 

@@ -1,13 +1,8 @@
 const deepstream = require('deepstream.io-client-js')
 const view = require('./view')
+const STATE = require('./state')
 
 const client = deepstream('localhost:6020')
-
-const STATE = {
-  WAITING_FOR_PLAYERS: 'WAITING_FOR_PLAYERS',
-  WAITING: 'WAITING',
-  PLAYING: 'PLAYING',
-}
 
 const HAND_SIZE = 10
 const INITIAL_TOKENS = 14
@@ -25,7 +20,7 @@ async function start (name) {
 
   const playerStateRecord = initialisePlayer(id, name, true)
   await playerStateRecord.whenReady()
-  await enterGameLoop({
+  await onStateChanged({
     gameStateRecord,
     boardStateRecord,
     playerStateRecord
@@ -40,27 +35,25 @@ async function join (name) {
   const { gameStateRecord, boardStateRecord } = await fetchGameState(id)
   const playerStateRecord = client.record.getRecord(`playerState/${id}`)
   await playerStateRecord.whenReady()
-  await enterGameLoop({
+  await onStateChanged({
     gameStateRecord,
     boardStateRecord,
     playerStateRecord
   })
 }
 
-async function enterGameLoop(records) {
-  while (true) {
-    const state = records.gameStateRecord.get('state')
-    switch (state) {
-      case STATE.WAITING_FOR_PLAYERS:
-        await waitingForPlayers(records)
-        break
-      case STATE.WAITING:
-        await wait(records)
-        break
-      case STATE.PLAYING:
-        await play(records)
-        break
-    }
+async function onStateChanged(records) {
+  const state = records.gameStateRecord.get('state')
+  switch (state) {
+    case STATE.WAITING_FOR_PLAYERS:
+      await waitingForPlayers(records)
+      break
+    case STATE.WAITING:
+      await wait(records)
+      break
+    case STATE.PLAYING:
+      await play(records)
+      break
   }
 }
 
@@ -114,7 +107,8 @@ async function initialiseGameState (master) {
   })
   boardStateRecord.set({
     groups: [],
-    pile: []
+    pile: [],
+    isValid: true
   })
 
   return {
@@ -139,8 +133,9 @@ function initialisePlayer (id, name, isMaster) {
     id,
     name,
     isMaster,
-    hand: { upper: Array(HAND_SIZE).fill(null), lower: Array(HAND_SIZE).fill(null) },
-    timeRemaining: 0
+    hand: [],
+    timeRemaining: 0,
+    canTakeFromPile: true
   })
 
   return playerStateRecord
@@ -173,27 +168,67 @@ function shuffle(a) {
 /*
  * Shuffle the pile and deal 14 tokens to each player
  */
-function dealBoard (boardStateRecord) {
+function dealBoard ({ gameStateRecord, boardStateRecord }) {
   const pile = createPile()
   shuffle(pile)
-  for (const playerId of gameState.players) {
-    for (let i = 0; i < INITIAL_TOKENS / 2; i++) {
-      player.hand.upper[i] = pile.pop()
-      player.hand.lower[i] = pile.pop()
+  const players = gameStateRecord.get('players')
+  const pile = boardStateRecord.get('pile')
+  for (const playerId of players) {
+    for (let i = 0; i < INITIAL_TOKENS; i++) {
+      player.hand[i] = pile.pop()
     }
   }
-  return {
-    pile,
-  }
+  boardStateRecord.set('pile', pile)
 }
 
-function updateBoard (boardStateRecord, { token, fromGroupId, toGroupId }) {
-
-  if (isValid()) {
+function moveTokenOnBoard ({ boardStateRecord }, { token, fromGroupId, toGroupId }) {
+  const groupState = boardStateRecord.get('groups')
+  if (groupState.every(groupIsValid)) {
     // enable DONE button
   } else {
     // disable DONE button
   }
+}
+
+function moveTokenFromHand ({ boardStateRecord, playerStateRecord }, { token, fromGroupId, toGroupId }) {
+}
+
+function takeTokenFromPile ({ boardStateRecord, playerStateRecord }) {
+  const pile = boardStateRecord.get('pile')
+  const token = pile.pop()
+  boardStateRecord.set('pile', pile)
+  const hand = playerStateRecord.get('hand')
+  hand.push(token)
+  playerStateRecord.set('hand', hand)
+  view.addTokenToHand(token)
+}
+
+function groupIsValid (group) {
+  return group.length >= 3 && (isRun(group) || isSet(group))
+}
+
+function isRun (group) {
+  let { num, color } = group[0]
+  for (let i = 1; i < group.length; i++) {
+    if (group[i].color !== color || group[i].num !== ++num) {
+      return false
+    }
+  }
+  return true
+}
+
+function isSet (group) {
+  let { num, color } = group[0]
+  for (let i = 1; i < group.length; i++) {
+    if (group[i].num !== num || group.slice(i).some(({ color: c }) => c === color)) {
+      return false
+    }
+  }
+  return true
+}
+
+function endTurn () {
+
 }
 
 function timerExpire (boardStateRecord) {
@@ -202,4 +237,8 @@ function timerExpire (boardStateRecord) {
 
 function update (boardStateRecord) {
 
+}
+
+module.exports = {
+  isSet, isRun
 }
