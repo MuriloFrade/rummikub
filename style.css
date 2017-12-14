@@ -18,7 +18,7 @@ li {
   position: fixed;
   top: 0;
   width: 100%;
-  background: blue;
+  /* background: blue; */
   height: 10%;
 }
 
@@ -27,8 +27,9 @@ li {
   top: 10%;
   left: 0%;
   width: 10%;
-  background: red;
-  height: 100%;
+  /* background: red; */
+  height: 75%;
+  display: table;
 }
 
 .board-screen .right {
@@ -36,8 +37,10 @@ li {
   top: 10%;
   right: 0%;
   width: 10%;
-  background: green;
-  height: 100%;
+  /* background: green; */
+  height: 75%;
+  display: table;
+
 }
 
 .board-screen .bottom {
@@ -45,7 +48,7 @@ li {
   bottom: 0%;
   width: 100%;
   height: 15%;
-  background: yellow;
+  /* background: yellow; */
 }
 
 .board-screen .middle {
@@ -53,11 +56,13 @@ li {
   top: 15%;
   left: 12%;
   width: 76%;
-  height: 60%;
-  background: gray;
+  height: 65%;
+  /* background: gray; */
   padding: 10px;
   border: 15px solid lightgreen ;
   border-radius: 12px;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 /* ===== */
@@ -69,7 +74,7 @@ li {
 }
 .player-numbers {
   display: inline-block;
-  width: 60%;
+  width: 70%;
   margin: 0 auto;
   text-align: center;
 }
@@ -91,10 +96,53 @@ li.token {
   opacity: 0.8;
 }
 
-
+.timer {
+  display: inline-block;
+  text-align: right;
+  font-size: 45px;
+  padding-left: 40px;
+}
 /*******/
+
+.player-numbers .token {
+  padding: 0.5% 0.5%;
+  min-width: 30px;
+}
 
 .board-tokens ul {
   margin-right: 30px;
   display: inline-block;
+}
+
+ .empty-group {
+  width: 50px;
+  height: 50px;
+  background-color: gray;
+
+}
+
+/**  PLAYER STATUS */
+
+.player-status {
+  padding-left: 15px;
+  display: table-cell;
+  vertical-align: middle;
+  width: 100%;
+}
+.top .player-status {
+ display: block;
+ text-align: center;
+}
+
+.player-status p {
+  font-size: 14px;
+}
+.player-status .avatar {
+  text-align: center;
+  display: inline;
+  margin: 0 auto;
+  font-size: 18px;
+}
+.player-status .avatar .playing {
+  color: orange
 }
