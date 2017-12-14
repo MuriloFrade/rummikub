@@ -1,5 +1,3 @@
-const STATE = require('./state')
-
 function renderWaitingForPlayers({ id, name, isMaster }) {
 
 }
@@ -45,13 +43,13 @@ function registerUpdateHooks({
   moveTokenOnBoard,
   moveTokenFromHand,
   takeTokenFromPile,
-  endTurn
+  endTurn,
   startGame
 }) {
 
 }
 
-module.exports = {
+view = {
   renderWaitingForPlayers,
   renderGameView,
   registerUpdateHooks

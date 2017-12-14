@@ -1,7 +1,3 @@
-const deepstream = require('deepstream.io-client-js')
-const view = require('./view')
-const STATE = require('./state')
-
 const HAND_SIZE = 10
 const INITIAL_TOKENS = 14
 const BOARD_ROWS = 10
@@ -9,12 +5,8 @@ const TIMER_INITIAL = 60
 const COLORS = ['red', 'blue', 'green', 'yellow']
 const NUM_PLAYERS = 4
 
-connect()
-  .then((client) => start(client, 'john'))
-  .catch(console.error)
-
 async function connect () {
-  const client = deepstream('localhost:6020')
+  const client = deepstream.deepstream('localhost:6020')
   await client.login()
   return client
 }
@@ -330,6 +322,8 @@ function startGame (records) {
   gameStateRecord.set('changingPlayer', true)
 }
 
-module.exports = {
-  isSet, isRun, sortedInsert
+game = {
+  connect,
+  start,
+  join
 }

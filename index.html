@@ -11,6 +11,7 @@
   </head>
   <body>
     <div id="app">
+      <span v-on:state="stateChanged"></span>
       <initial-screen v-if="status === 'initial'"></initial-screen>
       <waiting-screen v-if="status === 'waiting-players'"></waiting-screen>
       <board v-if="status === 'playing'"></board>
@@ -18,6 +19,11 @@
   </body>
   <script src="node_modules/sortablejs/Sortable.min.js"></script>
   <script src="node_modules/vue/dist/vue.js"></script>
+  <script src="node_modules/deepstream.io-client-js/dist/deepstream.js"></script>
+  <script src="shared-state.js"></script>
+  <script src="view.js"></script>
+  <script src="state.js"></script>
+  <script src="game.js"></script>
   <script src="initial-screen.js"></script>
   <script src="waiting-screen.js"></script>
   <script src="player-status.js"></script>

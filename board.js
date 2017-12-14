@@ -1,3 +1,5 @@
+
+
 Vue.component('board', {
   template:
   `<div class="board-screen">
