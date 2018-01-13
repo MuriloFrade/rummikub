@@ -49,7 +49,7 @@ function registerUpdateHooks({
 
 }
 
-view = {
+module.exports = {
   renderWaitingForPlayers,
   renderGameView,
   registerUpdateHooks

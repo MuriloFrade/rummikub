@@ -1,4 +1,7 @@
+require( './player-status' )
 
+const game = require('../../../game/game')
+const globalState = require('../global-state')
 
 Vue.component('board', {
   template:

@@ -5,13 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="src/view/css/style.css" rel="stylesheet">
 
   </head>
   <body>
     <div id="app">
-      <span v-on:state="stateChanged"></span>
       <initial-screen v-if="status === 'initial'"></initial-screen>
       <waiting-screen v-if="status === 'waiting-players'"></waiting-screen>
       <board v-if="status === 'playing'"></board>
@@ -20,13 +19,6 @@
   <script src="node_modules/sortablejs/Sortable.min.js"></script>
   <script src="node_modules/vue/dist/vue.js"></script>
   <script src="node_modules/deepstream.io-client-js/dist/deepstream.js"></script>
-  <script src="shared-state.js"></script>
-  <script src="view.js"></script>
-  <script src="state.js"></script>
-  <script src="game.js"></script>
-  <script src="initial-screen.js"></script>
-  <script src="waiting-screen.js"></script>
-  <script src="player-status.js"></script>
-  <script src="board.js"></script>
-  <script src="index.js"></script>
+  <script type="text/javascript" src="dist/bundle.js"></script>
+
 </html>

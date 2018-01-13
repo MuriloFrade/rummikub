@@ -13,7 +13,55 @@ li {
   display: inline;
 }
 
-/* == LAYOUT === */
+/*
+INITIAL SCREEN
+*/
+
+
+.initial-screen, .waiting-screen {
+  padding-top: 40px;
+  padding-bottom: 40px;
+
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.form-signin p {
+  margin-top: 1em;
+}
+
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+
+
+
+
+
+/* == LAYOUT BOARD === */
 .board-screen .top {
   position: fixed;
   top: 0;

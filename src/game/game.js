@@ -1,3 +1,7 @@
+const deepstream = require('deepstream.io-client-js')
+const view = require('./view')
+const STATE = require('./state')
+
 const HAND_SIZE = 10
 const INITIAL_TOKENS = 14
 const BOARD_ROWS = 10
@@ -322,8 +326,6 @@ function startGame (records) {
   gameStateRecord.set('changingPlayer', true)
 }
 
-game = {
-  connect,
-  start,
-  join
+module.exports = {
+  isSet, isRun, sortedInsert
 }

@@ -1,3 +1,0 @@
-const viewState = {
-  current: 'initial'
-}
